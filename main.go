@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math"
 	"net"
+	"os"
 	"strconv"
 	"time"
 )
@@ -19,21 +20,20 @@ func scanports(start, end int, host string) {
 			conn.Close()
 		}
 	}
-
 }
 
 func main() {
 	ports := math.Pow(2, 16)
 	threads := 100
 	var s, e int
+	host := os.Args[1]
 
 	distance := (int(ports) / threads)
 	for i := 0; i < threads-1; i++ {
 		s = i * distance
 		e = s + distance
-		go scanports(s, e, "10.10.10.226")
+		go scanports(s, e, host)
 	}
 
-	scanports(int(ports)-(int(ports)/threads), int(ports), "10.10.10.226")
-
+	scanports(int(ports)-(int(ports)/threads), int(ports), host)
 }
